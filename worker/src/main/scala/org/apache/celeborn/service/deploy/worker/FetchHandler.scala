@@ -246,7 +246,7 @@ class FetchHandler(
       // 1. when the current request is a non-range openStream, but the original unsorted file
       //    has been deleted by another range's openStream request.
       // 2. when the current request is a range openStream request.
-      if ((endIndex != Int.MaxValue) || (endIndex == Int.MaxValue && !fileInfo.addStream(
+      if ((endIndex != Int.MaxValue && endIndex != -1 && endIndex >= startIndex) || (endIndex == Int.MaxValue && !fileInfo.addStream(
           streamId))) {
         fileInfo = partitionsSorter.getSortedFileInfo(
           shuffleKey,
@@ -290,7 +290,8 @@ class FetchHandler(
               s"${NettyUtils.getRemoteAddress(client.getChannel)}")
           makeStreamHandler(
             streamId,
-            meta.getNumChunks)
+            meta.getNumChunks,
+            meta.getChunkOffsets)
         }
       workerSource.incCounter(WorkerSource.OPEN_STREAM_SUCCESS_COUNT)
       PbStreamHandlerOpt.newBuilder().setStreamHandler(streamHandler)

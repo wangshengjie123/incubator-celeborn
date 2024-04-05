@@ -17,9 +17,12 @@
 
 package org.apache.celeborn.tests.client
 
+import java.nio.charset.StandardCharsets
 import java.util
+
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ArrayBuffer
+
 import org.apache.celeborn.client.{LifecycleManager, ShuffleClientImpl, WithShuffleClientSuite}
 import org.apache.celeborn.client.LifecycleManager.ShuffleFailedWorkers
 import org.apache.celeborn.client.commit.CommitFilesParam
@@ -30,8 +33,6 @@ import org.apache.celeborn.common.protocol.message.StatusCode
 import org.apache.celeborn.common.util.{CelebornExitKind, Utils}
 import org.apache.celeborn.service.deploy.MiniClusterFeature
 import org.apache.celeborn.service.deploy.worker.CommitInfo
-
-import java.nio.charset.StandardCharsets
 
 class LifecycleManagerCommitFilesSuite extends WithShuffleClientSuite with MiniClusterFeature {
 
@@ -176,8 +177,8 @@ class LifecycleManagerCommitFilesSuite extends WithShuffleClientSuite with MiniC
     val buffer = "hello world".getBytes(StandardCharsets.UTF_8);
 
     0 until 3 foreach { partitionId =>
-        shuffleClient.pushData(shuffleId, 0, 0, partitionId, buffer, 0, buffer.length, 1, 1)
-        lifecycleManager.commitManager.finishMapperAttempt(shuffleId, 0, 0, 1, partitionId)
+      shuffleClient.pushData(shuffleId, 0, 0, partitionId, buffer, 0, buffer.length, 1, 1)
+      lifecycleManager.commitManager.finishMapperAttempt(shuffleId, 0, 0, 1, partitionId)
     }
 
     val commitHandler = lifecycleManager.commitManager.getCommitHandler(shuffleId)
