@@ -255,6 +255,7 @@ abstract class CommitHandler(
         }
 
         // record committed partitions storage hint and disk hint
+        logError("-----" + res.committedPrimaryStorageInfos)
         shuffleCommittedInfo.committedPrimaryStorageInfos.putAll(res.committedPrimaryStorageInfos)
         shuffleCommittedInfo.committedReplicaStorageInfos.putAll(res.committedReplicaStorageInfos)
 

@@ -142,6 +142,7 @@ class CelebornShuffleReader[K, C](
       if (fileGroups.partitionGroups.containsKey(partitionId)) {
         var locations = fileGroups.partitionGroups.get(partitionId)
         if (splitSkewPartitionWithoutMapRange) {
+          logError(s"Shuffle read locations: ${locations}")
           val partitionLocation2ChunkRange = CelebornPartitionUtil.splitSkewedPartitionLocations(
             new JArrayList(locations),
             startMapIndex,
